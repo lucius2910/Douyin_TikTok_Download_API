@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN  apt-get -y update  \
     && apt-get install -y --no-install-recommends \
-     python3.11 python3-pip python3.11-dev nodejs
+    python3.11 python3-pip python3.11-dev nodejs
 
 COPY . /app
 WORKDIR /app
@@ -15,4 +15,4 @@ RUN chmod +x start.sh && \
     apt-get autoremove -y \
     && apt-get remove -y python3-pip
 
-CMD ["./start.sh"]
+CMD ["python3", "web_api.py"]

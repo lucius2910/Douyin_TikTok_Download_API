@@ -3,11 +3,17 @@ version: "3.7"
 services:
 
   # bot
-  douyin_tiktok_download_api:
-    image: evil0ctal/douyin_tiktok_download_api
-    network_mode: host
-    container_name: douyin_tiktok_download_api
+  toptop:
+    container_name: toptop
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    networks:
+      - app-network
     restart: always
+    ports:
+      - "80:80"
+      - "8000:8000"
     volumes:
       - ./config.ini:/app/config.ini
     environment:
@@ -16,3 +22,7 @@ services:
       resources:
         limits:
           cpus: '0.80'
+
+networks:
+  app-network:
+    driver: bridge
