@@ -12,10 +12,7 @@ services:
       - app-network
     restart: always
     ports:
-      - "80:80"
       - "8000:8000"
-    volumes:
-      - ./config.ini:/app/config.ini
     environment:
       TZ: Asia/Shanghai
     deploy:
