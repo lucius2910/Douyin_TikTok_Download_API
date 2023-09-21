@@ -396,8 +396,7 @@ class Scraper:
             api_url = f'https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id={video_id}'
             print("正在获取视频数据API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies,
-                                       timeout=10) as response:
+                async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10) as response:
                     response = await response.json()
                     video_data = response['aweme_list'][0]
                     print('获取视频信息成功！')
