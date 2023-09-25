@@ -207,6 +207,40 @@ class Scraper:
         new_url = url + "&X-Bogus=" + xbogus
         return new_url
 
+    async def get_data(self, uid, max_cursor) -> Union[str, None]:
+        data = []
+        try:
+            # Construct the access link
+            api_url = f"https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id={uid}&count=10&max_cursor={max_cursor}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
+            api_url = self.generate_x_bogus_url(api_url)
+            # Access API
+            print("Obtaining video data API: {}".format(api_url))
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10) as response:
+                    response = await response.json()
+                    if response and "aweme_list" in response.keys():
+                        aweme_list = response["aweme_list"]
+                        for item in aweme_list:
+                            src = item["video"]["play_addr"]["url_list"][-1]
+                            desc = item["desc"]
+                            aweme_id = item["aweme_id"]
+                            data.append({
+                                "id": aweme_id,
+                                "src": src,
+                                "desc": desc
+                            })
+
+                    print('Obtaining video data successfully!')
+
+                    if response["has_more"]:
+                        return data, response['max_cursor']
+                    else:
+                        return data, None
+        except Exception as e:
+            print('Failed to obtain Douyin video data! reason:{}'.format(e))
+            # return None
+            raise e
+
     # Get Douyin video ID
     async def get_douyin_video_id(self, original_url: str) -> Union[str, None]:
         """
@@ -252,24 +286,23 @@ class Scraper:
         :param video_id: str - 抖音视频id
         :return:dict - 包含信息的字典
         """
-        print('正在获取抖音视频数据...')
+        print('Obtaining Douyin video data...')
         try:
-            # 构造访问链接/Construct the access link
-            # api_url = f"https://www.douyin.com/aweme/v1/web/aweme/detail/?device_platform=webapp&aid=6383&channel=channel_pc_web&aweme_id={video_id}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
+            # Construct the access link
             api_url = f"https://www.douyin.com/aweme/v1/web/aweme/detail/?device_platform=webapp&aid=6383&channel=channel_pc_web&aweme_id={video_id}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
             api_url = self.generate_x_bogus_url(api_url)
-            # 访问API/Access API
-            print("正在获取视频数据API: {}".format(api_url))
+            # Access API
+            print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10) as response:
                     response = await response.json()
                     # 获取视频数据/Get video data
                     video_data = response['aweme_detail']
-                    print('获取视频数据成功！')
+                    print('Obtaining video data successfully!')
                     # print("抖音API返回数据: {}".format(video_data))
                     return video_data
         except Exception as e:
-            print('获取抖音视频数据失败！原因:{}'.format(e))
+            print('Failed to obtain Douyin video data! reason:{}'.format(e))
             # return None
             raise e
 
@@ -300,15 +333,21 @@ class Scraper:
     # Get single Douyin video data
     @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
     async def get_douyin_user_profile_videos(self, profile_url: str) -> Union[dict, None]:
+        print('Obtaining Douyin profile videos data...')
         try:
-            api_url = f"https://api.tikhub.io/douyin_profile_videos/?douyin_profile_url={profile_url}&cursor=0&count=20"
-            _headers = {"Authorization": f"Bearer 123123"}
-            async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10) as response:
-                    response = await response.json()
-                    return response
+            url = "https://www.douyin.com/user/"
+            uid = re.split(url, profile_url)[-1]
+            max_cursor = 0
+            response = []
+            while True:
+                data, max_cursor = await self.get_data(uid=uid, max_cursor=max_cursor)
+                response += data
+                if not max_cursor:
+                    break
+                
+            return response        
         except Exception as e:
-            print('获取抖音视频数据失败！原因:{}'.format(e))
+            print('Failed to obtain Douyin profile videos data! reason:{}'.format(e))
             # return None
             raise e
 

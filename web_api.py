@@ -446,7 +446,7 @@ async def get_douyin_live_video_data(request: Request, douyin_live_video_url: st
 
 
 @app.get("/douyin_profile_videos/", response_class=ORJSONResponse, response_model=None, tags=["Douyin"])
-async def get_douyin_user_profile_videos(tikhub_token: str, douyin_user_url: str = None):
+async def get_douyin_user_profile_videos(douyin_user_url: str = None):
     """
     ## 用途/Usage
     - 获取抖音用户主页数据，参数是用户链接|ID
@@ -454,7 +454,7 @@ async def get_douyin_user_profile_videos(tikhub_token: str, douyin_user_url: str
     ## 参数/Parameter
     tikhub_token: https://api.tikhub.io/#/Authorization/login_for_access_token_user_login_post
     """
-    response = await api.get_douyin_user_profile_videos(tikhub_token=tikhub_token, profile_url=douyin_user_url)
+    response = await api.get_douyin_user_profile_videos(profile_url=douyin_user_url)
     return response
 
 
