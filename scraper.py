@@ -207,11 +207,11 @@ class Scraper:
         new_url = url + "&X-Bogus=" + xbogus
         return new_url
 
-    async def get_data(self, uid, max_cursor) -> Union[str, None]:
+    async def get_douyin_user_profile_videos_paged(self, uid, max_cursor) -> Union[str, None]:
         data = []
         try:
             # Construct the access link
-            api_url = f"https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id={uid}&count=10&max_cursor={max_cursor}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
+            api_url = f"https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id={uid}&count=20&max_cursor={max_cursor}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
             api_url = self.generate_x_bogus_url(api_url)
             # Access API
             print("Obtaining video data API: {}".format(api_url))
@@ -296,10 +296,9 @@ class Scraper:
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10) as response:
                     response = await response.json()
-                    # 获取视频数据/Get video data
+                    # Get video data
                     video_data = response['aweme_detail']
                     print('Obtaining video data successfully!')
-                    # print("抖音API返回数据: {}".format(video_data))
                     return video_data
         except Exception as e:
             print('Failed to obtain Douyin video data! reason:{}'.format(e))
@@ -340,7 +339,7 @@ class Scraper:
             max_cursor = 0
             response = []
             while True:
-                data, max_cursor = await self.get_data(uid=uid, max_cursor=max_cursor)
+                data, max_cursor = await self.get_douyin_user_profile_videos_paged(uid=uid, max_cursor=max_cursor)
                 response += data
                 if not max_cursor:
                     break
@@ -412,33 +411,39 @@ class Scraper:
         :param video_id: 视频id
         :return: 视频信息
         """
-        print('正在获取TikTok视频数据...')
+        print('Getting TikTok video data...')
         try:
             # 构造访问链接/Construct the access link
             api_url = f'https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id={video_id}'
-            print("正在获取视频数据API: {}".format(api_url))
+            print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10) as response:
                     response = await response.json()
                     video_data = response['aweme_list'][0]
-                    print('获取视频信息成功！')
+                    print('Obtaining video information successfully!')
                     return video_data
         except Exception as e:
-            print('获取视频信息失败！原因:{}'.format(e))
+            print('Failed to obtain video information! reason:{}'.format(e))
             # return None
             raise e
 
     @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
-    async def get_tiktok_user_profile_videos(self, tiktok_video_url: str, tikhub_token: str) -> Union[dict, None]:
+    async def get_tiktok_user_profile_videos(self, profile_url: str) -> Union[dict, None]:
+        print('Obtaining Tiktok profile videos data...')
         try:
-            api_url = f"https://api.tikhub.io/tiktok_profile_videos/?tiktok_video_url={tiktok_video_url}&cursor=0&count=20"
-            _headers = {"Authorization": f"Bearer {tikhub_token}"}
-            async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10) as response:
-                    response = await response.json()
-                    return response
+            url = "https://www.tiktok.com/"
+            uid = re.split(url, profile_url)[-1]
+            max_cursor = 0
+            response = []
+            while True:
+                data, max_cursor = await self.get_douyin_user_profile_videos_paged(uid=uid, max_cursor=max_cursor)
+                response += data
+                if not max_cursor:
+                    break
+                
+            return response        
         except Exception as e:
-            print('获取抖音视频数据失败！原因:{}'.format(e))
+            print('Failed to obtain Tiktok profile videos data! reason:{}'.format(e))
             # return None
             raise e
 

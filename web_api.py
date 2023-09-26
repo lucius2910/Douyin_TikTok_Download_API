@@ -44,25 +44,19 @@ title = "Douyin TikTok Download/Scraper API-V1"
 version = '3.1.3'
 update_time = "2023/02/19"
 description = """
-#### Description/说明
+#### Description
 <details>
-<summary>点击展开/Click to expand</summary>
-> [中文/Chinese]
-- 爬取Douyin以及TikTok的数据并返回，更多功能正在开发中。
-- 如果需要更多接口，请查看[https://api.tikhub.io/docs](https://api.tikhub.io/docs)。
-- 本项目开源在[GitHub：Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API)。
-- 全部端点数据均来自抖音以及TikTok的官方接口，如遇到问题或BUG或建议请在[issues](https://github.com/Evil0ctal/Douyin_TikTok_Download_API/issues)中反馈。
-- 本项目仅供学习交流使用，严禁用于违法用途，如有侵权请联系作者。
-> [英文/English]
+<summary>Click to expand</summary>
+
 - Crawl the data of Douyin and TikTok and return it. More features are under development.
 - If you need more interfaces, please visit [https://api.tikhub.io/docs](https://api.tikhub.io/docs).
 - This project is open source on [GitHub: Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API).
 - All endpoint data comes from the official interface of Douyin and TikTok. If you have any questions or BUGs or suggestions, please feedback in [issues](
 - This project is for learning and communication only. It is strictly forbidden to be used for illegal purposes. If there is any infringement, please contact the author.
 </details>
-#### Contact author/联系作者
+#### Contact author
 <details>
-<summary>点击展开/Click to expand</summary>
+<summary>Click to expand</summary>
 - WeChat: Evil0ctal
 - Email: [Evil0ctal1985@gmail.com](mailto:Evil0ctal1985@gmail.com)
 - Github: [https://github.com/Evil0ctal](https://github.com/Evil0ctal)
@@ -75,23 +69,23 @@ tags_metadata = [
     },
     {
         "name": "API",
-        "description": "Hybrid interface, automatically determine the input link and return the simplified data/混合接口，自动判断输入链接返回精简后的数据。",
+        "description": "Hybrid interface, automatically determine the input link and return the simplified data",
     },
     {
         "name": "Douyin",
-        "description": "All Douyin API Endpoints/所有抖音接口节点",
+        "description": "All Douyin API Endpoints",
     },
     {
         "name": "TikTok",
-        "description": "All TikTok API Endpoints/所有TikTok接口节点",
+        "description": "All TikTok API Endpoints",
     },
     {
         "name": "Download",
-        "description": "Enter the share link and return the download file response./输入分享链接后返回下载文件响应",
+        "description": "Enter the share link and return the download file response.",
     },
     {
         "name": "iOS_Shortcut",
-        "description": "Get iOS shortcut info/获取iOS快捷指令信息",
+        "description": "Get iOS shortcut info",
     },
 ]
 
@@ -119,7 +113,7 @@ limiter = Limiter(key_func=get_remote_address)
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-""" ________________________⬇️端点响应模型(Endpoints Response Model)⬇️________________________"""
+""" ________________________⬇️(Endpoints Response Model)⬇️________________________"""
 
 
 # API Root节点
@@ -216,7 +210,7 @@ async def api_logs(start_time, input_data, endpoint, error_data: dict = None):
         return 0
 
 
-""" ________________________⬇️Root端点(Root endpoint)⬇️________________________"""
+""" ________________________⬇️Root endpoint⬇️________________________"""
 
 
 # Root端点
@@ -230,18 +224,17 @@ async def root():
         "Version": version,
         "Update_time": update_time,
         "Request_Rate_Limit": Rate_Limit,
-        "Web_APP": "https://www.douyin.wtf/",
-        "API_V1_Document": "https://api.douyin.wtf/docs",
-        "TikHub_API_Document": "https://api.tikhub.io/docs",
-        "GitHub": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API",
+        # "Web_APP": "https://www.douyin.wtf/",
+        # "API_V1_Document": "https://api.douyin.wtf/docs",
+        # "TikHub_API_Document": "https://api.tikhub.io/docs",
+        # "GitHub": "https://github.com/Evil0ctal/Douyin_TikTok_Download_API",
     }
     return ORJSONResponse(data)
 
 
-""" ________________________⬇️混合解析端点(Hybrid parsing endpoints)⬇️________________________"""
+""" ________________________⬇️Hybrid parsing endpoints⬇️________________________"""
 
 
-# 混合解析端点,自动判断输入链接返回精简后的数据
 # Hybrid parsing endpoint, automatically determine the input link and return the simplified data.
 @app.get("/api", tags=["API"], response_class=ORJSONResponse, response_model=API_Hybrid_Response)
 @limiter.limit(Rate_Limit)
@@ -287,9 +280,7 @@ async def hybrid_parsing(request: Request, url: str, minimal: bool = False):
         # 合并数据
         result.update(data)
     # 记录API调用
-    await api_logs(start_time=start_time,
-                   input_data={'url': url},
-                   endpoint='api')
+    await api_logs(start_time=start_time, input_data={'url': url}, endpoint='api')
     return ORJSONResponse(result)
 
 
@@ -564,7 +555,7 @@ async def get_tiktok_video_data(request: Request, tiktok_video_url: str = None, 
 
 # 获取TikTok用户视频数据/Get TikTok user video data
 @app.get("/tiktok_profile_videos/", response_class=ORJSONResponse, response_model=None, tags=["TikTok"])
-async def get_tiktok_profile_videos(tikhub_token: str, tiktok_video_url: str = None):
+async def get_tiktok_profile_videos(profile_url: str):
     """
     ## 用途/Usage
     - 获取抖音用户主页数据，参数是用户链接|ID
@@ -572,7 +563,7 @@ async def get_tiktok_profile_videos(tikhub_token: str, tiktok_video_url: str = N
     ## 参数/Parameter
     tikhub_token: https://api.tikhub.io/#/Authorization/login_for_access_token_user_login_post
     """
-    response = await api.get_tiktok_user_profile_videos(tikhub_token=tikhub_token, tiktok_video_url=tiktok_video_url)
+    response = await api.get_tiktok_user_profile_videos(profile_url=profile_url)
     return response
 
 
