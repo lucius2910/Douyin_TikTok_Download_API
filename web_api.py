@@ -860,4 +860,4 @@ if __name__ == '__main__':
     # 建议使用gunicorn启动，使用uvicorn启动时请将debug设置为False
     # It is recommended to use gunicorn to start, when using uvicorn to start, please set debug to False
     # uvicorn web_api:app --host '0.0.0.0' --port 8000 --reload
-    uvicorn.run("web_api:app", host='0.0.0.0', port=port, reload=True, access_log=False)
+    uvicorn.run("web_api:app", host='localhost', port=port, reload=True, access_log=False)
