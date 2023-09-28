@@ -1,13 +1,5 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-# @Author: https://github.com/Evil0ctal/
-# @Time: 2021/11/06
-# @Update: 2023/03/08
-# @Version: 3.1.5
-# @Function:
-# Create a FastAPi application that accepts submission parameters.
-# Return the content returned by scraper.py in JSON format.
-
 
 import os
 import time
@@ -605,8 +597,7 @@ async def download_file_hybrid(request: Request, url: str, prefix: bool = True, 
         """
     # 是否开启此端点/Whether to enable this endpoint
     if config["Web_API"]["Download_Switch"] != "True":
-        return ORJSONResponse({"status": "endpoint closed",
-                               "message": "此端点已关闭请在配置文件中开启/This endpoint is closed, please enable it in the configuration file"})
+        return ORJSONResponse({"status": "endpoint closed", "message": "This endpoint is closed, please enable it in the configuration file"})
     # 开始时间
     start_time = time.time()
     headers = {

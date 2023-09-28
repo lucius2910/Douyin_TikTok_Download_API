@@ -408,7 +408,7 @@ class Scraper:
                     else:
                         return data, None
         except Exception as e:
-            print('Failed to obtain Douyin video data! reason:{}'.format(e))
+            print('Failed to obtain Tiktok video data! reason:{}'.format(e))
             # return None
             raise e
 
@@ -433,6 +433,29 @@ class Scraper:
         except Exception as e:
             print('获取TikTok视频ID出错了:{}'.format(e))
             return None
+    
+    @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
+    async def get_tiktok_user_profile(self, profile_url: str) -> Union[dict, None]:
+        """
+        获取单个视频信息
+        :param video_id: 视频id
+        :return: 视频信息
+        """
+        print('Getting TikTok user profile')
+        try:
+            # Construct the access link
+            print("Obtaining video data API: {}".format(profile_url))
+            async with aiohttp.ClientSession() as session:
+                async with session.get(profile_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
+                    data_res = await response.content.read()
+                    secUid = re.findall('"secUid":"((\d*|\w*|-*|_*)*)"', data_res.decode('utf-8'))[0]
+                    print('Obtaining video information successfully!: {}'.format(secUid[0]))
+                    return secUid[0]
+        except Exception as e:
+            print('Failed to obtain video information! reason:{}'.format(e))
+            # return None
+            raise e
+
 
     @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
     async def get_tiktok_video_data(self, video_id: str) -> Union[dict, None]:
@@ -459,15 +482,14 @@ class Scraper:
 
     @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
     async def get_tiktok_user_profile_videos(self, profile_url: str) -> Union[dict, None]:
-        print('Get user profile ...')
-
-        print('Obtaining Tiktok profile videos data...')
         try:
-            url = "https://www.tiktok.com/"
-            secUid = 'MS4wLjABAAAAin4ldw-XEOP19vjUr_DMVdiZZqG2eu5IqrBco8ZKzWby04JgJsHlgyDl086-9ca1'
-            cursor = 0
+            print('Get user profile ...')
+            secUid = await self.get_tiktok_user_profile(profile_url)
+            
+            print('Obtaining Tiktok profile videos data...')
             response = []
             ids = []
+            cursor = 0
             while True:
                 data, cursor = await self.get_tiktok_user_profile_videos_paged(secUid=secUid, cursor=cursor)
                 ids += data
@@ -475,10 +497,10 @@ class Scraper:
                     break
             
             for id in ids:
-                data = await self.get_tiktok_video_data(id['id'])
-                response += data
+                video_data = await self.get_tiktok_video_data(id['id'])
+                response.append(video_data)
 
-            return response        
+            return response       
         except Exception as e:
             print('Failed to obtain Tiktok profile videos data! reason:{}'.format(e))
             # return None
