@@ -59,7 +59,7 @@ class Scraper:
             'accept-encoding': 'gzip, deflate, br',
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36',
             'referer': 'https://www.douyin.com/',
-            'cookie': "s_v_web_id=verify_leytkxgn_kvO5kOmO_SdMs_4t1o_B5ml_BUqtWM1mP6BF;"
+            'cookie': 'ttwid=1%7C0YBAnAwiC5T3U5yJi8RVXEK3DOwF_2vpJ7kVJJZe8HU%7C1694528301%7Ca9d2d8a4164959a0d7a1f92fe29d37bb779753092ad24d4705a9543707327d49; __live_version__=%221.1.1.3713%22; odin_tt=7cc03fc9dcb682088842ab4494c2862765db476b30ae42ab083e10e8ceb34b88290d1360d16f7c499bac5925e6670a8df72a742a1ebee72ae6ba12fcea622efa; pwa2=%223%7C0%7C0%7C0%22; bd_ticket_guard_client_data=eyJiZC10aWNrZXQtZ3VhcmQtdmVyc2lvbiI6MiwiYmQtdGlja2V0LWd1YXJkLWl0ZXJhdGlvbi12ZXJzaW9uIjoxLCJiZC10aWNrZXQtZ3VhcmQtcmVlLXB1YmxpYy1rZXkiOiJCRXhuWUdqREVBa3ErdjRsT2l3anRIWi9HU2hRNXFseWdJMklLanIxM0orRHozYnA0M2pXc3M3N25CUzdnbE5tTXhHbWU3cldoSE9pdkJvVmNnT2JiWFU9IiwiYmQtdGlja2V0LWd1YXJkLXdlYi12ZXJzaW9uIjoxfQ==; n_mh=13KNPUKNEzoW3A4J-OLRxfal2zj1GbF-vJUFPs3WSIY; LOGIN_STATUS=0; store-region=us; store-region-src=uid; d_ticket=28acd5a9c6df4227b13582669694acded6ede; my_rd=1; MONITOR_WEB_ID=cf748a1e-9532-4d89-a1fc-13a5729f0942; publish_badge_show_info=%220%2C0%2C0%2C1695295934872%22; IsDouyinActive=true; home_can_add_dy_2_desktop=%220%22; strategyABtestKey=%221695695809.268%22; stream_recommend_feed_params=%22%7B%5C%22cookie_enabled%5C%22%3Atrue%2C%5C%22screen_width%5C%22%3A1344%2C%5C%22screen_height%5C%22%3A756%2C%5C%22browser_online%5C%22%3Atrue%2C%5C%22cpu_core_num%5C%22%3A16%2C%5C%22device_memory%5C%22%3A0%2C%5C%22downlink%5C%22%3A%5C%22%5C%22%2C%5C%22effective_type%5C%22%3A%5C%22%5C%22%2C%5C%22round_trip_time%5C%22%3A0%7D%22; VIDEO_FILTER_MEMO_SELECT=%7B%22expireTime%22%3A1695983681533%2C%22type%22%3A1%7D; volume_info=%7B%22isUserMute%22%3Afalse%2C%22isMute%22%3Atrue%2C%22volume%22%3A1%7D; passport_csrf_token=56f6961b57a8d08feb7db46160908a87; passport_csrf_token_default=56f6961b57a8d08feb7db46160908a87; s_v_web_id=verify_lmt3fhsw_K7nE3bgs_zkNT_4N3S_BeK7_5x7F8Bgu5fVy; FORCE_LOGIN=%7B%22videoConsumedRemainSeconds%22%3A180%7D; msToken=Z9-0y9elP0-Obz51QCWE2WH-JrZ-IHKgyHX6i0Fc7cNUBXQJFSIZjxemEKqgmm4EIxPVWfNPglnGQgzvANzOcW6OA3yzYv1W-plCkw-nP-OkNH00Ion2FohnZl4ySAc=; download_guide=%223%2F20230921%2F0%22; _bd_ticket_crypt_doamin=3; _bd_ticket_crypt_cookie=ddccf5fec8be44d560eb069c2f0bad6b; __security_server_data_status=1; SEARCH_RESULT_LIST_TYPE=%22single%22; xgplayer_user_id=362991673413; _tea_utm_cache_1243=undefined; douyin.com; device_web_cpu_core=16; device_web_memory_size=-1; architecture=amd64; webcast_local_quality=null; __ac_signature=_02B4Z6wo00f01OAvurgAAIDB.GwEB.TxAPDgH74AAF0f4YxOQt1lX7G.X.ym1.H9RXZ8GhgAMPpgMgVFfuGyJ0gwPNH6P21IVw3QQGVundxhs6atZTMMJQnum-pZ5gI-Y7bQVafwXlkIAKs699; tt_scid=WnohADMH48aNQjUPGqPJwRi3J2t3ShdUWylw0d7vHKM4J.wh4sR44Ccd5u5mIH7b7edc; msToken=tQwydd12h5Kq3jUn-FGOBneTMH8TjMOhkj5uQy1kcOogPeYFej3w8_sfGhxOLfRH_VJ1Tg8NDSCNfwch9EZNxHqIg5kgJhdAxtqNMtT8NRV1T_T76MmB3fcaOGNVz0g='
         }
         self.tiktok_api_headers = {
             'User-Agent': 'com.ss.android.ugc.trill/494+Mozilla/5.0+(Linux;+Android+12;+2112123G+Build/SKQ1.211006.001;+wv)+AppleWebKit/537.36+(KHTML,+like+Gecko)+Version/4.0+Chrome/107.0.5304.105+Mobile+Safari/537.36'
@@ -138,7 +138,7 @@ class Scraper:
                 try:
                     async with aiohttp.ClientSession() as session:
                         async with session.get(url, headers=self.headers, proxy=self.proxies, allow_redirects=False,
-                                               timeout=10) as response:
+                                               timeout=10, ssl=False) as response:
                             if response.status == 302:
                                 url = response.headers['Location'].split('?')[0] if '?' in response.headers[
                                     'Location'] else \
@@ -170,7 +170,7 @@ class Scraper:
                 try:
                     async with aiohttp.ClientSession() as session:
                         async with session.get(url, headers=self.headers, proxy=self.proxies, allow_redirects=False,
-                                               timeout=10) as response:
+                                               timeout=10, ssl=False) as response:
                             if response.status == 301:
                                 url = response.headers['Location'].split('?')[0] if '?' in response.headers[
                                     'Location'] else \
@@ -216,7 +216,7 @@ class Scraper:
             # Access API
             print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     if response and "aweme_list" in response.keys():
                         aweme_list = response["aweme_list"]
@@ -294,7 +294,7 @@ class Scraper:
             # Access API
             print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     # Get video data
                     video_data = response['aweme_detail']
@@ -316,7 +316,7 @@ class Scraper:
             print("正在获取视频数据API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
                 async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies,
-                                       timeout=10) as response:
+                                       timeout=10, ssl=False) as response:
                     response = await response.json()
                     # 获取视频数据/Get video data
                     video_data = response['data']
@@ -357,7 +357,7 @@ class Scraper:
             api_url = f"https://api.tikhub.io/douyin_profile_liked_videos/?douyin_profile_url={profile_url}&cursor=0&count=20"
             _headers = {"Authorization": f"Bearer {tikhub_token}"}
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     return response
         except Exception as e:
@@ -372,7 +372,7 @@ class Scraper:
             api_url = f"https://api.tikhub.io/douyin_video_comments/?douyin_video_url={video_url}&cursor=0&count=20"
             _headers = {"Authorization": f"Bearer {tikhub_token}"}
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     return response
         except Exception as e:
@@ -381,6 +381,40 @@ class Scraper:
             raise e
 
     """__________________________________________⬇️TikTok methods(TikTok方法)⬇️______________________________________"""
+
+    async def get_tiktok_user_profile_videos_paged(self, uid, max_cursor) -> Union[str, None]:
+        data = []
+        try:
+            # Construct the access link
+            api_url = f"https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id={uid}&count=20&max_cursor={max_cursor}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
+            api_url = self.generate_x_bogus_url(api_url)
+            # Access API
+            print("Obtaining video data API: {}".format(api_url))
+            async with aiohttp.ClientSession() as session:
+                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
+                    response = await response.json()
+                    if response and "aweme_list" in response.keys():
+                        aweme_list = response["aweme_list"]
+                        for item in aweme_list:
+                            src = item["video"]["play_addr"]["url_list"][-1]
+                            desc = item["desc"]
+                            aweme_id = item["aweme_id"]
+                            data.append({
+                                "id": aweme_id,
+                                "src": src,
+                                "desc": desc
+                            })
+
+                    print('Obtaining video data successfully!')
+
+                    if response["has_more"]:
+                        return data, response['max_cursor']
+                    else:
+                        return data, None
+        except Exception as e:
+            print('Failed to obtain Douyin video data! reason:{}'.format(e))
+            # return None
+            raise e
 
     # Get TikTok video ID
     async def get_tiktok_video_id(self, original_url: str) -> Union[str, None]:
@@ -417,7 +451,7 @@ class Scraper:
             api_url = f'https://api16-normal-c-useast1a.tiktokv.com/aweme/v1/feed/?aweme_id={video_id}'
             print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     video_data = response['aweme_list'][0]
                     print('Obtaining video information successfully!')
@@ -436,7 +470,7 @@ class Scraper:
             max_cursor = 0
             response = []
             while True:
-                data, max_cursor = await self.get_douyin_user_profile_videos_paged(uid=uid, max_cursor=max_cursor)
+                data, max_cursor = await self.get_tiktok_user_profile_videos_paged(uid=uid, max_cursor=max_cursor)
                 response += data
                 if not max_cursor:
                     break
@@ -453,7 +487,7 @@ class Scraper:
             api_url = f"https://api.tikhub.io/tiktok_profile_liked_videos/?tiktok_video_url={tiktok_video_url}&cursor=0&count=20"
             _headers = {"Authorization": f"Bearer {tikhub_token}"}
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10) as response:
+                async with session.get(api_url, headers=_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
                     return response
         except Exception as e:

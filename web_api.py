@@ -5,8 +5,8 @@
 # @Update: 2023/03/08
 # @Version: 3.1.5
 # @Function:
-# 创建一个接受提交参数的FastAPi应用程序。
-# 将scraper.py返回的内容以JSON格式返回。
+# Create a FastAPi application that accepts submission parameters.
+# Return the content returned by scraper.py in JSON format.
 
 
 import os
@@ -40,7 +40,7 @@ domain = config["Web_API"]["Domain"]
 Rate_Limit = config["Web_API"]["Rate_Limit"]
 
 # 创建FastAPI实例
-title = "Douyin TikTok Download/Scraper API-V1"
+title = "Scraper API-V1"
 version = '3.1.3'
 update_time = "2023/02/19"
 description = """
@@ -53,13 +53,6 @@ description = """
 - This project is open source on [GitHub: Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API).
 - All endpoint data comes from the official interface of Douyin and TikTok. If you have any questions or BUGs or suggestions, please feedback in [issues](
 - This project is for learning and communication only. It is strictly forbidden to be used for illegal purposes. If there is any infringement, please contact the author.
-</details>
-#### Contact author
-<details>
-<summary>Click to expand</summary>
-- WeChat: Evil0ctal
-- Email: [Evil0ctal1985@gmail.com](mailto:Evil0ctal1985@gmail.com)
-- Github: [https://github.com/Evil0ctal](https://github.com/Evil0ctal)
 </details>
 """
 tags_metadata = [
@@ -355,7 +348,7 @@ async def get_douyin_video_data(request: Request, douyin_video_url: str = None, 
                 "status": "success",
                 "platform": "douyin",
                 "endpoint": "/douyin_video_data/",
-                "message": "获取视频数据成功/Got video data successfully",
+                "message": "Got video data successfully",
                 "total_time": total_time,
                 "aweme_list": [video_data]
             }
@@ -510,8 +503,7 @@ async def get_tiktok_video_data(request: Request, tiktok_video_url: str = None, 
     if video_id is None or video_id == "":
         video_id = await api.get_tiktok_video_id(tiktok_video_url)
         if video_id is None:
-            return ORJSONResponse({"status": "fail", "platform": "tiktok", "endpoint": "/tiktok_video_data/",
-                                   "message": "获取视频ID失败/Get video ID failed"})
+            return ORJSONResponse({"status": "fail", "platform": "tiktok", "endpoint": "/tiktok_video_data/", "message": "获取视频ID失败/Get video ID failed"})
     if video_id is not None and video_id != '':
         print('开始解析单个TikTok视频数据')
         video_data = await api.get_tiktok_video_data(video_id)
@@ -527,9 +519,7 @@ async def get_tiktok_video_data(request: Request, tiktok_video_url: str = None, 
             }
             return ORJSONResponse(result)
         # 记录API调用
-        await api_logs(start_time=start_time,
-                       input_data={'tiktok_video_url': tiktok_video_url, 'video_id': video_id},
-                       endpoint='tiktok_video_data')
+        await api_logs(start_time=start_time, input_data={'tiktok_video_url': tiktok_video_url, 'video_id': video_id}, endpoint='tiktok_video_data')
         # 结束时间
         total_time = float(format(time.time() - start_time, '.4f'))
         # 返回数据
@@ -537,7 +527,7 @@ async def get_tiktok_video_data(request: Request, tiktok_video_url: str = None, 
             "status": "success",
             "platform": "tiktok",
             "endpoint": "/tiktok_video_data/",
-            "message": "获取视频数据成功/Got video data successfully",
+            "message": "Got video data successfully",
             "total_time": total_time,
             "aweme_list": [video_data]
         }
@@ -557,11 +547,9 @@ async def get_tiktok_video_data(request: Request, tiktok_video_url: str = None, 
 @app.get("/tiktok_profile_videos/", response_class=ORJSONResponse, response_model=None, tags=["TikTok"])
 async def get_tiktok_profile_videos(profile_url: str):
     """
-    ## 用途/Usage
-    - 获取抖音用户主页数据，参数是用户链接|ID
+    ## Usage
+    - ID
     - Get the data of a Douyin user profile, the parameter is the user link or ID.
-    ## 参数/Parameter
-    tikhub_token: https://api.tikhub.io/#/Authorization/login_for_access_token_user_login_post
     """
     response = await api.get_tiktok_user_profile_videos(profile_url=profile_url)
     return response
@@ -860,4 +848,4 @@ if __name__ == '__main__':
     # 建议使用gunicorn启动，使用uvicorn启动时请将debug设置为False
     # It is recommended to use gunicorn to start, when using uvicorn to start, please set debug to False
     # uvicorn web_api:app --host '0.0.0.0' --port 8000 --reload
-    uvicorn.run("web_api:app", host='localhost', port=port, reload=True, access_log=False)
+    uvicorn.run("web_api:app", host='0.0.0.0', port=port, reload=True, access_log=False)

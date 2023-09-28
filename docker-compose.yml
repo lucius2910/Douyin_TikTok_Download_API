@@ -4,7 +4,7 @@ services:
 
   # bot
   toptop:
-    container_name: toptop
+    container_name: api
     build:
       context: ./
       dockerfile: Dockerfile
@@ -12,7 +12,7 @@ services:
       - app-network
     restart: always
     ports:
-      - "8000:8000"
+      - "8001:8001"
     environment:
       TZ: Asia/Shanghai
     deploy:
