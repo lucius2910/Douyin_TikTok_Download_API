@@ -382,33 +382,29 @@ class Scraper:
 
     """__________________________________________⬇️TikTok methods(TikTok方法)⬇️______________________________________"""
 
-    async def get_tiktok_user_profile_videos_paged(self, uid, max_cursor) -> Union[str, None]:
+    async def get_tiktok_user_profile_videos_paged(self, secUid, cursor) -> Union[str, None]:
         data = []
         try:
             # Construct the access link
-            api_url = f"https://www.douyin.com/aweme/v1/web/aweme/post/?device_platform=webapp&aid=6383&channel=channel_pc_web&sec_user_id={uid}&count=20&max_cursor={max_cursor}&pc_client_type=1&version_code=190500&version_name=19.5.0&cookie_enabled=true&screen_width=1344&screen_height=756&browser_language=zh-CN&browser_platform=Win32&browser_name=Firefox&browser_version=110.0&browser_online=true&engine_name=Gecko&engine_version=109.0&os_name=Windows&os_version=10&cpu_core_num=16&device_memory=&platform=PC&webid=7158288523463362079&msToken=abL8SeUTPa9-EToD8qfC7toScSADxpg6yLh2dbNcpWHzE0bT04txM_4UwquIcRvkRb9IU8sifwgM1Kwf1Lsld81o9Irt2_yNyUbbQPSUO8EfVlZJ_78FckDFnwVBVUVK"
-            api_url = self.generate_x_bogus_url(api_url)
+            api_url = f"https://www.tiktok.com/api/post/item_list/?aid=1988&count=20&cursor={cursor}&secUid={secUid}"
+            # api_url = self.generate_x_bogus_url(api_url)
             # Access API
             print("Obtaining video data API: {}".format(api_url))
             async with aiohttp.ClientSession() as session:
-                async with session.get(api_url, headers=self.douyin_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
+                async with session.get(api_url, headers=self.tiktok_api_headers, proxy=self.proxies, timeout=10, ssl=False) as response:
                     response = await response.json()
-                    if response and "aweme_list" in response.keys():
-                        aweme_list = response["aweme_list"]
-                        for item in aweme_list:
-                            src = item["video"]["play_addr"]["url_list"][-1]
-                            desc = item["desc"]
-                            aweme_id = item["aweme_id"]
+                    if response and "itemList" in response.keys():
+                        itemList = response["itemList"]
+                        for item in itemList:
+                            id = item["id"]
                             data.append({
-                                "id": aweme_id,
-                                "src": src,
-                                "desc": desc
+                                "id": id,
                             })
 
                     print('Obtaining video data successfully!')
 
-                    if response["has_more"]:
-                        return data, response['max_cursor']
+                    if response["hasMore"]:
+                        return data, response['cursor']
                     else:
                         return data, None
         except Exception as e:
@@ -463,18 +459,25 @@ class Scraper:
 
     @retry(stop=stop_after_attempt(4), wait=wait_fixed(7))
     async def get_tiktok_user_profile_videos(self, profile_url: str) -> Union[dict, None]:
+        print('Get user profile ...')
+
         print('Obtaining Tiktok profile videos data...')
         try:
             url = "https://www.tiktok.com/"
-            uid = re.split(url, profile_url)[-1]
-            max_cursor = 0
+            secUid = 'MS4wLjABAAAAin4ldw-XEOP19vjUr_DMVdiZZqG2eu5IqrBco8ZKzWby04JgJsHlgyDl086-9ca1'
+            cursor = 0
             response = []
+            ids = []
             while True:
-                data, max_cursor = await self.get_tiktok_user_profile_videos_paged(uid=uid, max_cursor=max_cursor)
-                response += data
-                if not max_cursor:
+                data, cursor = await self.get_tiktok_user_profile_videos_paged(secUid=secUid, cursor=cursor)
+                ids += data
+                if not cursor:
                     break
-                
+            
+            for id in ids:
+                data = await self.get_tiktok_video_data(id['id'])
+                response += data
+
             return response        
         except Exception as e:
             print('Failed to obtain Tiktok profile videos data! reason:{}'.format(e))
