@@ -225,26 +225,22 @@ async def root():
 @limiter.limit(Rate_Limit)
 async def hybrid_parsing(request: Request, url: str, minimal: bool = False):
     """
-        ## 用途/Usage
-        - 获取[抖音|TikTok]单个视频数据，参数是视频链接或分享口令。
+        ## Usage
         - Get [Douyin|TikTok] single video data, the parameter is the video link or share code.
-        ## 参数/Parameter
-        #### url(必填/Required)):
-        - 视频链接。| 分享口令
+        ## Parameter
+        #### url(Required)):
         - The video link.| Share code
-        - 例子/Example:
+        - Example:
         `https://www.douyin.com/video/7153585499477757192`
         `https://v.douyin.com/MkmSwy7/`
         `https://vm.tiktok.com/TTPdkQvKjP/`
         `https://www.tiktok.com/@tvamii/video/7045537727743380782`
-        #### minimal(选填/Optional Default:False):
-        - 是否返回精简版数据。
+        #### minimal(Optional Default:False):
         - Whether to return simplified data.
-        - 例子/Example:
+        - Example:
         `True`
         `False`
-        ## 返回值/Return
-        - 用户当个视频数据的列表，列表内包含JSON数据。
+        ## Return
         - List of user single video data, list contains JSON data.
     """
     print("正在进行混合解析...")
@@ -424,12 +420,18 @@ async def get_douyin_live_video_data(request: Request, douyin_live_video_url: st
 @app.get("/douyin_profile_videos/", response_class=ORJSONResponse, response_model=None, tags=["Douyin"])
 async def get_douyin_user_profile_videos(douyin_user_url: str = None):
     """
-    ## 用途/Usage
-    - 获取抖音用户主页数据，参数是用户链接|ID
+    ## Usage
     - Get the data of a Douyin user profile, the parameter is the user link or ID.
-    ## 参数/Parameter
-    tikhub_token: https://api.tikhub.io/#/Authorization/login_for_access_token_user_login_post
+    ## Parameter
+    #### douyin_user_url(Required)):
+    - The video link.| Share code
+        - Example:
+        `https://v.douyin.com/ie7NG2vL/`
+        `https://www.douyin.com/user/MS4wLjABAAAAbnR5AtfbGctyOYT56LHL-C3FrgtfvY63pEUFwwJ4NDQ`
+    ## Return
+        - List of user single video data, list contains JSON data.
     """
+    
     response = await api.get_douyin_user_profile_videos(profile_url=douyin_user_url)
     return response
 
